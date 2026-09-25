@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RIFAN — Creative Developer & 3D Spatial Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=interactive-slider" />
+</head>
+<body>
+  <!-- Preloader -->
+  <div id="loader" class="loader">
+    <div class="loader-content">
+      <div class="loader-brand">RIFAN <span>// 01</span></div>
+      <div class="loader-track">
+        <div id="loaderBar" class="loader-bar"></div>
+      </div>
+      <div class="loader-text" id="loaderText">INITIALIZING 3D ENGINE 0%</div>
+    </div>
+  </div>
+
+  <!-- Background 3D Canvas Stage -->
+  <div class="stage-container">
+    <canvas id="canvas"></canvas>
+    <div class="stage-ambient-glow"></div>
+    <div class="stage-grid"></div>
+  </div>
+
+  <!-- Floating Glassmorphic Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#hero" class="nav-logo">
+        <span class="logo-mark">R</span>
+        <span class="logo-text">RIFAN <em>/ 3D</em></span>
+      </a>
+
+      <div class="nav-controls-group">
+        <div class="nav-status">
+          <span class="status-pulse"></span>
+          <span class="status-text">Available for Projects</span>
+        </div>
+
+        <button id="toggleBgModeBtn" class="nav-bg-mode-btn" title="Klik untuk ganti mode tampilan foto (Full Seamless / Full Cover)">
+          <span class="mode-icon">⛶</span>
+          <span id="bgModeText">BG: Full Seamless</span>
+        </button>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="#experience" class="nav-link">Work Experience</a>
+        <a href="#vault" class="nav-link">Project Vault</a>
+        <a href="#skills" class="nav-link">Tech Matrix</a>
+        <a href="#contact" class="nav-link nav-btn">Let's Talk</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Interactive 3D Content Container -->
+  <main class="content-stage">
+    
+    <!-- Hero Section -->
+    <section id="hero" class="section hero-section">
+      <div class="hero-content tilt-element" data-depth="20">
+        <div class="hero-tag">
+          <span class="tag-icon">✦</span>
+          <span>INTERACTIVE 3D & CREATIVE ENGINEERING</span>
+        </div>
+        <h1 class="hero-title">
+          <span>SHAPING</span>
+          <span class="text-gradient">DIMENSIONS</span>
+          <span>IN CODE.</span>
+        </h1>
+        <p class="hero-subtitle">
+          Merging cutting-edge WebGL, cinematic motion, and high-performance frontend architecture into unforgettable digital experiences.
+        </p>
+        <div class="hero-actions">
+          <a href="#experience" class="btn btn-primary">
+            <span>Work Experience</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+          </a>
+          <a href="#vault" class="btn btn-secondary">
+            <span>Project Vault 🚀</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="scroll-cue">
+        <div class="mouse-icon">
+          <div class="wheel"></div>
+        </div>
+        <span>SCROLL TO EXPLORE</span>
+      </div>
+    </section>
+
+    <!-- 01 / Work Experience Section -->
+    <section id="experience" class="section projects-section">
+      <div class="section-header">
+        <span class="section-num">01 / CAREER</span>
+        <h2 class="section-title">Work Experience</h2>
+      </div>
+
+      <div class="projects-grid">
+        <!-- Pengalaman 1 -->
+        <div class="project-card tilt-card" data-depth="35">
+          <div class="card-glare"></div>
+          <div class="project-preview preview-1">
+            <div class="project-overlay"></div>
+            <span class="project-category">VENDOR / TECHNOLOGY</span>
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">Vendor Amora</h3>
+            <p class="project-desc">
+              Berpengalaman sebagai vendor profesional yang menangani kebutuhan teknologi dan layanan digital klien, termasuk koordinasi proyek, menjaga kualitas deliverable, serta komunikasi yang solid dengan tim dan pelanggan.
+            </p>
+            <div class="project-tags">
+              <span>Vendor</span>
+              <span>Layanan Klien</span>
+              <span>Koordinasi Tim</span>
+              <span>Komunikasi</span>
+            </div>
+            <div class="project-links">
+              <a href="#contact" class="proj-link">Hubungi Saya ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pengalaman 2 -->
+        <div class="project-card tilt-card" data-depth="35">
+          <div class="card-glare"></div>
+          <div class="project-preview preview-btn">
+            <div class="project-overlay"></div>
+            <span class="project-category">IT SUPPORT / BANKING</span>
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">IT Support PT. Bank Tabungan Negara</h3>
+            <p class="project-desc">
+              Memberikan dukungan teknis infrastruktur IT di lingkungan perbankan, menangani troubleshooting perangkat keras dan jaringan, konfigurasi server rack dan switch LAN, serta memastikan kelancaran operasional sistem perbankan harian.
+            </p>
+            <div class="project-tags">
+              <span>IT Support</span>
+              <span>LAN / Switch</span>
+              <span>Server Rack</span>
+              <span>Troubleshooting</span>
+              <span>System Operation</span>
+            </div>
+            <div class="project-links">
+              <a href="#vault" class="proj-link">Lihat Dokumentasi ↗</a>
+            </div>
+          </div>
+        </div>
+
+        </div>
+    </section>
+
+    <!-- 02 / Project Vault & Video Archive -->
+    <section id="vault" class="section vault-section">
+      <div class="section-header">
+        <div class="header-split">
+          <div>
+            <span class="section-num">02 / REPOSITORY</span>
+            <h2 class="section-title">PROJECT VAULT &amp; SHOWCASE</h2>
+          </div>
+          <div class="vault-controls">
+            <label for="localVideoUpload" class="btn btn-secondary btn-upload" title="Pilih video atau gambar dari komputermu untuk dipratinjau secara instan">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+              <span>+ Preview Media Lokal</span>
+              <input type="file" id="localVideoUpload" accept="video/*,image/*" style="display: none;" />
+            </label>
+          </div>
+        </div>
+        <p class="section-desc">
+          Dokumentasi proyek terintegrasi yang mencakup sistem Bot AI otonom, aplikasi travel self-hosted, map &amp; sistem Roblox 3D, undangan digital WebGL, dan implementasi infrastruktur IT perbankan. Klik kartu untuk menonton video atau menjelajahi galeri foto berurutan resolusi penuh.
+        </p>
+
+        <!-- Category Filter Tabs -->
+        <div class="filter-tabs">
+          <button class="filter-btn active" data-filter="all">Semua Projek (<span id="countAll">9</span>)</button>
+          <button class="filter-btn" data-filter="bot-ai">AI &amp; Telegram Bot</button>
+          <button class="filter-btn" data-filter="web3d">Web &amp; 3D Interactive</button>
+          <button class="filter-btn" data-filter="fullstack">App &amp; Desktop</button>
+          <button class="filter-btn" data-filter="game">Game Dev (Unity &amp; Roblox)</button>
+          <button class="filter-btn" data-filter="infra">IT Support</button>
+        </div>
+      </div>
+
+      <!-- Video & Project Grid Container -->
+      <div class="video-grid" id="videoVaultGrid">
+        <!-- Rendered dynamically via JavaScript for easy storage and addition -->
+      </div>
+    </section>
+
+    <!-- 03 / Skills & Tech Matrix Section -->
+    <section id="skills" class="section skills-section">
+      <div class="section-header">
+        <span class="section-num">03 / CAPABILITIES</span>
+        <h2 class="section-title">THE TECH MATRIX</h2>
+      </div>
+
+      <div class="skills-grid">
+        <div class="glass-card tilt-card" data-depth="20">
+          <div class="card-glare"></div>
+          <div class="skill-category-title">CREATIVE TECH & 3D</div>
+          <div class="pills-wrap">
+            <span class="pill active">Unity 6 / 3D</span>
+            <span class="pill active">C# Scripting</span>
+            <span class="pill active">Three.js</span>
+            <span class="pill active">WebGL</span>
+            <span class="pill active">GLSL Shaders</span>
+            <span class="pill active">Roblox Studio</span>
+            <span class="pill active">Lua Scripting</span>
+            <span class="pill">HTML5 Canvas</span>
+            <span class="pill">GSAP ScrollTrigger</span>
+            <span class="pill">Blender 3D</span>
+          </div>
+        </div>
+
+        <div class="glass-card tilt-card" data-depth="20">
+          <div class="card-glare"></div>
+          <div class="skill-category-title">AI & SYSTEM DEVELOPMENT</div>
+          <div class="pills-wrap">
+            <span class="pill active">Python</span>
+            <span class="pill active">pyTelegramBotAPI</span>
+            <span class="pill active">Groq LLM API</span>
+            <span class="pill active">Google Gemini AI</span>
+            <span class="pill active">Ollama (Local AI)</span>
+            <span class="pill">Node.js</span>
+            <span class="pill">SQLite</span>
+            <span class="pill">Docker</span>
+          </div>
+        </div>
+
+        <div class="glass-card tilt-card" data-depth="20">
+          <div class="card-glare"></div>
+          <div class="skill-category-title">FRONTEND & INFRASTRUCTURE</div>
+          <div class="pills-wrap">
+            <span class="pill active">Next.js</span>
+            <span class="pill active">React.js</span>
+            <span class="pill active">Tailwind CSS</span>
+            <span class="pill">Playwright Scraper</span>
+            <span class="pill">Network / Switch Routing</span>
+            <span class="pill">Server Rack & Hardware</span>
+            <span class="pill">Git & GitHub</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 / Contact Section -->
+    <section id="contact" class="section contact-section">
+      <div class="contact-card glass-card tilt-card" data-depth="40">
+        <div class="card-glare"></div>
+        <div class="contact-badge">READY TO COLLABORATE?</div>
+        <h2 class="contact-title">LET'S BUILD SOMETHING <span class="text-gradient">ICONIC.</span></h2>
+        <p class="contact-desc">
+          Have an ambitious 3D project, interactive web experience, or digital brand that needs to stand out? Let's discuss your vision.
+        </p>
+
+        <div class="contact-actions">
+          <button id="copyEmailBtn" class="btn btn-primary btn-copy" data-email="rifan.dev@example.com">
+            <span class="btn-text">rifan.dev@example.com</span>
+            <span class="btn-badge">COPY</span>
+          </button>
+          <a href="mailto:rifan.dev@example.com" class="btn btn-secondary">
+            <span>Open Mail App ↗</span>
+          </a>
+        </div>
+
+        <div class="social-links">
+          <a href="https://github.com" target="_blank" rel="noreferrer" class="social-icon" title="GitHub">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noreferrer" class="social-icon" title="LinkedIn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          </a>
+          <a href="https://twitter.com" target="_blank" rel="noreferrer" class="social-icon" title="X / Twitter">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        </div>
+
+        <div class="footer-note">
+          © 2026 RIFAN. ALL RIGHTS RESERVED. CRAFTED WITH SMOOTH 3D CANVAS & HARDWARE ACCELERATION.
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 3D Cinema Video Modal Player -->
+  <div id="cinemaModal" class="cinema-modal" aria-hidden="true">
+    <div class="cinema-backdrop" id="cinemaBackdrop"></div>
+    <div class="cinema-container">
+      <button class="cinema-close-btn" id="cinemaCloseBtn" title="Close Modal (Esc)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+
+      <div class="cinema-player-box" id="cinemaPlayerBox">
+        <video id="cinemaVideo" class="cinema-video" controls playsinline></video>
+        <div id="cinemaGalleryBox" class="cinema-gallery-box" style="display: none;">
+          <img id="cinemaGalleryImg" class="cinema-gallery-img" src="" alt="Project Showcase" />
+          <button id="galleryPrevBtn" class="gallery-nav-btn prev" title="Foto Sebelumnya (Panah Kiri)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button id="galleryNextBtn" class="gallery-nav-btn next" title="Foto Selanjutnya (Panah Kanan)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+          <div id="galleryCounter" class="gallery-counter">Foto 1 / 1</div>
+        </div>
+      </div>
+
+      <div id="galleryThumbStrip" class="gallery-thumb-strip" style="display: none;">
+        <!-- Numbered buttons [1] [2] [3] ... rendered dynamically -->
+      </div>
+
+      <div class="cinema-details">
+        <div class="cinema-meta">
+          <span class="cinema-category" id="cinemaCategory">CATEGORY</span>
+          <span class="cinema-year" id="cinemaYear">2026</span>
+          <span class="cinema-client" id="cinemaClient">CLIENT</span>
+        </div>
+        <h3 class="cinema-title" id="cinemaTitle">Project Title</h3>
+        <p class="cinema-desc" id="cinemaDesc">Project description goes here.</p>
+        <div class="cinema-tags" id="cinemaTags"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js?v=updated-descriptions"></script>
+</body>
+</html>
