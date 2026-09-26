@@ -100,27 +100,58 @@
       tags: ['Network Troubleshooting', 'LAN / Switch Routing', 'Server Rack Cabling', 'Windows CMD', 'System Security', 'Hardware Diagnostics']
     },
     {
+      id: 'proj-web-toko-bunga',
+      title: 'Amora Craft House — Web Toko Bunga, Admin & Owner Dashboard',
+      category: 'fullstack',
+      categoryLabel: 'FULLSTACK & E-COMMERCE',
+      mediaType: 'gallery',
+      images: [
+        'assets/videos/vendor/1.jpeg',
+        'assets/videos/vendor/2.jpeg',
+        'assets/videos/vendor/3.jpeg',
+        'assets/videos/vendor/4.jpeg',
+        'assets/videos/vendor/5.jpeg',
+        'assets/videos/vendor/6.jpeg'
+      ],
+      imageLabels: [
+        '1. Portal Login Admin & Owner — Akses Autentikasi Terenkripsi & RLS',
+        '2. Menu Utama Admin — Dashboard, Pesanan, Produk, Absensi & Analitik',
+        '3. Panel Owner Monitoring — Ringkasan Realtime, Audit Trail Live & Deteksi Fraud',
+        '4. Website Toko Bunga — Halaman Utama E-Commerce Florist Amora ("Where Beauty Blooms Eternal")',
+        '5. Our Heritage — Storytelling & Filosofi Perjalanan Florist Romantis',
+        '6. Form Checkout Pemesanan — Multi-Metode Pembayaran (BCA, Mandiri, E-Wallet, COD)'
+      ],
+      quality: 'FULLSTACK / 6 FOTO',
+      client: 'Amora Craft House (Florist)',
+      year: '2026',
+      role: 'Fullstack Web Developer & Vendor',
+      desc: 'Platform digital e-commerce dan sistem operasional bisnis terintegrasi untuk Amora Craft House. Terdiri dari 3 jenis program utama: (1) Website Toko Bunga & E-Commerce Pelanggan (katalog produk interaktif, keranjang belanja, & form checkout multi-metode pembayaran), (2) Dashboard Operasional Admin (manajemen inventaris bunga, katalog produk, status pesanan, & analitik), serta (3) Panel Monitoring Owner (pengawasan omzet real-time, audit trail keamanan anti-fraud, dan verifikasi absensi kamera karyawan berbasis Supabase BaaS & PostgreSQL).',
+      tags: ['Website E-Commerce', 'Dashboard Admin', 'Owner Monitoring Panel', 'Sistem Absensi Kamera', 'React 18', 'TypeScript', 'TailwindCSS', 'Vite', 'Supabase BaaS', 'PostgreSQL 15', 'Vanilla JS', 'MediaDevices API']
+    },
+    {
       id: 'proj-maps-roblox',
       title: 'MAPS Roblox — 3D Obby & Custom Lua Architecture',
       category: 'game',
       categoryLabel: 'GAME DEV & ROBLOX',
-      mediaType: 'gallery',
+      mediaType: 'video',
+      videoSrc: 'assets/videos/MAPS Roblox/1.mp4',
       images: [
-        'assets/videos/MAPS Roblox/1.jpg',
         'assets/videos/MAPS Roblox/2.jpg',
-        'assets/videos/MAPS Roblox/3.jpg'
+        'assets/videos/MAPS Roblox/3.jpg',
+        'assets/videos/MAPS Roblox/4.jpg'
       ],
       imageLabels: [
-        '1. Level Design Beginner Summit & Overhead Title System',
-        '2. Platform Melayang Luar Angkasa & Client Scripts (AntiTP, Checkpoint)',
-        '3. ServerScriptService (CheckpointService, CommandServer, TitleManager)'
+        '2. Level Design Beginner Summit & Overhead Title System',
+        '3. Platform Melayang Luar Angkasa & Client Scripts (AntiTP, Checkpoint)',
+        '4. ServerScriptService (CheckpointService, CommandServer, SmiteScript, TitleManager)'
       ],
-      quality: '3D MAP / 3 FOTO',
+      quality: 'ROBLOX / VIDEO & 3 FOTO',
+      duration: '00:05',
       client: 'Roblox Community / Platform',
       year: '2026',
       role: 'Roblox Developer & Level Designer',
-      desc: 'pembuatan map di roblox studio menggunakan Bahasa program lua,dan menggunakan plugin dalam roblox studio.dalam projek pengerjaan meliputi program,3D level design,game mechanics&services,admin tools&infrastructure dan juga membuat FilteringEnabled',
-      tags: ['Roblox Studio', 'Lua Scripting', '3D Level Design', 'ServerScriptService', 'Game Mechanics', 'Client-Server Architecture']
+      desc: 'Pembuatan map di Roblox Studio menggunakan bahasa program Lua dan plugin Roblox Studio. Projek mencakup video walkthrough gameplay 3D, obby level design, game mechanics & services, admin tools & infrastructure, serta implementasi FilteringEnabled client-server yang aman.',
+      tags: ['Roblox Studio', 'Lua Scripting', '3D Level Design', 'ServerScriptService', 'Game Mechanics', 'Client-Server Architecture', 'FilteringEnabled']
     },
     {
       id: 'proj-game-fps',
@@ -499,9 +530,6 @@
       const isVideo = project.mediaType === 'video';
       const firstImage = (project.images && project.images.length > 0) ? project.images[0] : '';
       const photoCount = project.images ? project.images.length : 0;
-      const mediaBadge = isVideo
-        ? `<span class="video-duration">${project.duration}</span>`
-        : (photoCount > 1 ? `<span class="video-duration">📸 1 / ${photoCount}</span>` : '');
 
       const hasBothMedia = isVideo && project.images && project.images.length > 0;
       const actionText = hasBothMedia
@@ -540,13 +568,7 @@
       card.innerHTML = `
         <div class="card-glare"></div>
         <div class="video-thumb-box">
-          <div class="video-badge-group">
-            <span class="video-cat-badge">${project.categoryLabel}</span>
-            <span class="video-quality-badge">${project.quality}</span>
-          </div>
-
           ${mediaHtml}
-          ${mediaBadge}
         </div>
 
         <div class="video-card-body">
@@ -741,7 +763,11 @@
     }
 
     if (galleryCounter) {
-      galleryCounter.textContent = total > 1 ? `Foto ${index + 1} / ${total}` : 'Foto 1 / 1';
+      if (currentModalProject.id === 'proj-maps-roblox') {
+        galleryCounter.textContent = `Foto ${index + 2} / ${total + 1}`;
+      } else {
+        galleryCounter.textContent = total > 1 ? `Foto ${index + 1} / ${total}` : 'Foto 1 / 1';
+      }
     }
 
     if (cinemaClient && currentLabel) {
@@ -761,8 +787,58 @@
     }
   }
 
+  function showHybridVideo() {
+    if (!currentModalProject || !currentModalProject.videoSrc) return;
+    currentGalleryIndex = -1;
+    if (cinemaGalleryBox) cinemaGalleryBox.style.display = 'none';
+    if (galleryPrevBtn) galleryPrevBtn.style.display = 'flex';
+    if (galleryNextBtn) galleryNextBtn.style.display = 'flex';
+    if (cinemaVideo) {
+      cinemaVideo.style.display = 'block';
+      cinemaVideo.play().catch(() => {});
+    }
+    if (galleryCounter) {
+      if (currentModalProject.id === 'proj-maps-roblox') {
+        galleryCounter.textContent = `🎥 1 / ${currentModalProject.images.length + 1} • Video Showcase MAPS Roblox`;
+      } else {
+        const projectShortName = currentModalProject.title.split('—')[0].trim();
+        galleryCounter.textContent = `🎥 Video Showcase • ${projectShortName}`;
+      }
+    }
+    if (cinemaClient) cinemaClient.textContent = `File: Video Showcase • Client: ${currentModalProject.client}`;
+    if (galleryThumbStrip) {
+      galleryThumbStrip.querySelectorAll('.gallery-num-btn').forEach((b, idx) => {
+        b.classList.toggle('active', idx === 0);
+      });
+    }
+  }
+
+  function switchToHybridPhoto(idx) {
+    if (!currentModalProject || !currentModalProject.images) return;
+    if (cinemaVideo) {
+      cinemaVideo.pause();
+      cinemaVideo.style.display = 'none';
+    }
+    if (cinemaGalleryBox) cinemaGalleryBox.style.display = 'flex';
+    if (galleryPrevBtn) galleryPrevBtn.style.display = 'flex';
+    if (galleryNextBtn) galleryNextBtn.style.display = 'flex';
+    updateGalleryView(idx);
+  }
+
   function nextGalleryImage() {
-    if (currentModalProject && currentModalProject.images && currentModalProject.images.length > 1) {
+    if (!currentModalProject) return;
+    const hasBothMedia = !!currentModalProject.videoSrc && currentModalProject.images && currentModalProject.images.length > 0;
+    if (hasBothMedia) {
+      if (currentGalleryIndex === -1) {
+        switchToHybridPhoto(0);
+      } else if (currentGalleryIndex >= currentModalProject.images.length - 1) {
+        showHybridVideo();
+      } else {
+        switchToHybridPhoto(currentGalleryIndex + 1);
+      }
+      return;
+    }
+    if (currentModalProject.images && currentModalProject.images.length > 1) {
       if (cinemaVideo && cinemaVideo.style.display !== 'none') {
         cinemaVideo.pause();
         cinemaVideo.style.display = 'none';
@@ -776,7 +852,19 @@
   }
 
   function prevGalleryImage() {
-    if (currentModalProject && currentModalProject.images && currentModalProject.images.length > 1) {
+    if (!currentModalProject) return;
+    const hasBothMedia = !!currentModalProject.videoSrc && currentModalProject.images && currentModalProject.images.length > 0;
+    if (hasBothMedia) {
+      if (currentGalleryIndex === -1) {
+        switchToHybridPhoto(currentModalProject.images.length - 1);
+      } else if (currentGalleryIndex <= 0) {
+        showHybridVideo();
+      } else {
+        switchToHybridPhoto(currentGalleryIndex - 1);
+      }
+      return;
+    }
+    if (currentModalProject.images && currentModalProject.images.length > 1) {
       if (cinemaVideo && cinemaVideo.style.display !== 'none') {
         cinemaVideo.pause();
         cinemaVideo.style.display = 'none';
@@ -817,42 +905,21 @@
     const hasBothMedia = !!project.videoSrc && project.images && project.images.length > 0;
 
     if (hasBothMedia) {
-      // PROJEK HYBRID: VIDEO & FOTO (Unity FPS Game Dev Showcase)
-      if (cinemaVideo) {
-        cinemaVideo.style.display = 'block';
-        cinemaVideo.src = project.videoSrc;
-        cinemaVideo.play().catch(() => {});
-      }
-      if (cinemaGalleryBox) cinemaGalleryBox.style.display = 'none';
-      if (galleryPrevBtn) galleryPrevBtn.style.display = 'none';
-      if (galleryNextBtn) galleryNextBtn.style.display = 'none';
-      if (galleryCounter) {
-        galleryCounter.style.display = 'block';
-        galleryCounter.textContent = '🎥 Video Showcase Unity';
-      }
+      // PROJEK HYBRID: VIDEO & FOTO (Unity FPS, Roblox, dll.)
+      showHybridVideo();
 
       if (galleryThumbStrip) {
         galleryThumbStrip.style.display = 'flex';
         galleryThumbStrip.innerHTML = '';
 
-        // Tombol Video Dev Showcase
+        // Tombol Video Dev/Gameplay Showcase
         const vidBtn = document.createElement('button');
         vidBtn.className = 'gallery-num-btn active';
-        vidBtn.innerHTML = '<span>🎥 Video Dev</span>';
-        vidBtn.title = 'Putar Video Showcase Pembuatan Game FPS';
+        vidBtn.innerHTML = '<span>🎥 1. Video</span>';
+        vidBtn.title = `Putar Video Showcase ${project.title}`;
         vidBtn.addEventListener('click', e => {
           e.stopPropagation();
-          galleryThumbStrip.querySelectorAll('.gallery-num-btn').forEach(b => b.classList.remove('active'));
-          vidBtn.classList.add('active');
-          if (cinemaGalleryBox) cinemaGalleryBox.style.display = 'none';
-          if (galleryPrevBtn) galleryPrevBtn.style.display = 'none';
-          if (galleryNextBtn) galleryNextBtn.style.display = 'none';
-          if (cinemaVideo) {
-            cinemaVideo.style.display = 'block';
-            cinemaVideo.play().catch(() => {});
-          }
-          if (galleryCounter) galleryCounter.textContent = '🎥 Video Showcase Unity';
-          if (cinemaClient) cinemaClient.textContent = `File: Video Showcase Unity 6 • Client: ${project.client}`;
+          showHybridVideo();
         });
         galleryThumbStrip.appendChild(vidBtn);
 
@@ -861,7 +928,7 @@
           const btn = document.createElement('button');
           btn.className = 'gallery-num-btn';
           btn.dataset.imgIdx = idx;
-          const labelNum = idx + 1;
+          const labelNum = project.id === 'proj-maps-roblox' ? (idx + 2) : (idx + 1);
           btn.innerHTML = `<span>Foto ${labelNum}</span>`;
           btn.title = project.imageLabels && project.imageLabels[idx] ? project.imageLabels[idx] : `Buka Foto ${labelNum}`;
           btn.addEventListener('click', e => {

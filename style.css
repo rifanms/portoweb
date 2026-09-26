@@ -674,7 +674,7 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .preview-1 {
-  background: linear-gradient(135deg, #1b0a0a, #4a0e1c, #1a0826);
+  background: linear-gradient(180deg, rgba(7, 3, 3, 0.35), rgba(7, 3, 3, 0.88)), url('assets/videos/vendor/4.jpeg') center 20% / cover no-repeat;
 }
 .preview-2 {
   background: linear-gradient(135deg, #09121a, #0b2e2d, #081014);
@@ -882,41 +882,10 @@ body::-webkit-scrollbar-thumb:hover {
   transform: scale(1.06);
 }
 
-.video-badge-group {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  right: 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 3;
-  pointer-events: none;
-}
-
-.video-cat-badge {
-  font-family: var(--font-display);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(8px);
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
+.video-badge-group,
+.video-cat-badge,
 .video-quality-badge {
-  font-family: var(--font-display);
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: var(--accent-red);
-  background: rgba(14, 4, 6, 0.75);
-  backdrop-filter: blur(8px);
-  padding: 4px 8px;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 51, 102, 0.3);
+  display: none !important;
 }
 
 /* In-Card Photo Slider */
@@ -1021,18 +990,7 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .video-duration {
-  position: absolute;
-  bottom: 12px;
-  right: 12px;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(6px);
-  font-family: var(--font-display);
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: #fff;
-  padding: 3px 8px;
-  border-radius: 4px;
-  z-index: 3;
+  display: none !important;
 }
 
 /* Progress bar inside card */
