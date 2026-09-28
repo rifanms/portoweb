@@ -987,22 +987,189 @@
     }
   });
 
+  // -------------------------------------------------------------
+  // WORK EXPERIENCE PHOTO SWAP / SLIDER CONTROLLER
+  // Memungkinkan foto Amora Craft House & IT Support BTN di-swap langsung
+  // dengan swipe touch (Android & iOS), tombol panah, dan dots
+  // -------------------------------------------------------------
+  const WORK_EXP_DATA = {
+    vendor: {
+      id: 'exp-vendor',
+      title: 'Vendor Amora Craft House — Web Toko Bunga, Admin & Owner Dashboard',
+      category: 'fullstack',
+      categoryLabel: 'VENDOR / IT SOLUTION',
+      quality: 'FULLSTACK / 6 FOTO',
+      client: 'Amora Craft House (Florist)',
+      year: '2026',
+      role: 'Fullstack Web Developer & Vendor',
+      desc: 'Platform digital e-commerce dan sistem operasional bisnis terintegrasi untuk Amora Craft House: mencakup Website Toko Bunga pelanggan (katalog interaktif & form checkout), Dashboard Operasional Admin (manajemen pesanan & inventaris), serta Panel Owner (monitoring omzet realtime, audit log, dan verifikasi absensi karyawan berbasis Supabase BaaS & PostgreSQL).',
+      tags: ['Website E-Commerce', 'Dashboard Admin', 'Owner Monitoring Panel', 'Sistem Absensi Kamera', 'React 18', 'TypeScript', 'TailwindCSS', 'Vite', 'Supabase BaaS', 'PostgreSQL 15'],
+      images: [
+        'assets/videos/vendor/1.jpeg',
+        'assets/videos/vendor/2.jpeg',
+        'assets/videos/vendor/3.jpeg',
+        'assets/videos/vendor/4.jpeg',
+        'assets/videos/vendor/5.jpeg',
+        'assets/videos/vendor/6.jpeg'
+      ],
+      imageLabels: [
+        '1. Portal Login Admin & Owner — Akses Autentikasi Terenkripsi & RLS',
+        '2. Menu Utama Admin — Dashboard, Pesanan, Produk, Absensi & Analitik',
+        '3. Panel Owner Monitoring — Ringkasan Realtime, Audit Trail Live & Deteksi Fraud',
+        '4. Website Toko Bunga — Halaman Utama E-Commerce Florist Amora ("Where Beauty Blooms Eternal")',
+        '5. Our Heritage — Storytelling & Filosofi Perjalanan Florist Romantis',
+        '6. Form Checkout Pemesanan — Multi-Metode Pembayaran (BCA, Mandiri, E-Wallet, COD)'
+      ]
+    },
+    btn: {
+      id: 'exp-btn',
+      title: 'IT Support & Network Infrastructure — PT. Bank Tabungan Negara',
+      category: 'infra',
+      categoryLabel: 'IT SUPPORT / BANKING',
+      quality: 'REAL WORK / 6 FOTO',
+      client: 'PT. Bank Tabungan Negara (Persero) Tbk',
+      year: '2026',
+      role: 'IT Support Specialist',
+      desc: 'Pemeliharaan dan dukungan infrastruktur teknologi perbankan: penataan rak server dan switch LAN, troubleshooting hardware & network, deployment workstation karyawan, serta monitoring keamanan sistem operasional harian.',
+      tags: ['Network Troubleshooting', 'LAN / Switch Routing', 'Server Rack Cabling', 'Windows CMD', 'System Security', 'Hardware Diagnostics'],
+      images: [
+        'assets/videos/IT Support PT. Bank Tabungan Negara/1.png',
+        'assets/videos/IT Support PT. Bank Tabungan Negara/2.jpeg',
+        'assets/videos/IT Support PT. Bank Tabungan Negara/3.jpeg',
+        'assets/videos/IT Support PT. Bank Tabungan Negara/4.jpeg',
+        'assets/videos/IT Support PT. Bank Tabungan Negara/5.jpeg',
+        'assets/videos/IT Support PT. Bank Tabungan Negara/6.jpeg'
+      ],
+      imageLabels: [
+        '1. Foto Dokumentasi Kerja IT Support di PT. Bank Tabungan Negara',
+        '2. Manajemen Rak Server, Switch Jaringan & Penataan Kabel LAN',
+        '3. Deployment Workstation & Penataan Perangkat PC Kantor Cabang',
+        '4. Troubleshooting Jaringan & Diagnosa Sistem via Windows CMD',
+        '5. Verifikasi IP Jaringan & Konfigurasi Adapter Wi-Fi/LAN',
+        '6. Monitoring Operasional Sistem & Kebijakan Internal Perbankan'
+      ]
+    }
+  };
+
+  function initWorkExperienceSliders() {
+    const sliders = document.querySelectorAll('.exp-slider-preview');
+    sliders.forEach(slider => {
+      const expKey = slider.dataset.exp;
+      const data = WORK_EXP_DATA[expKey];
+      if (!data || !data.images || data.images.length === 0) return;
+
+      let currentIndex = 0;
+      const totalImages = data.images.length;
+      const slideImg = slider.querySelector('.card-slide-img');
+      const counterEl = slider.querySelector('.exp-slide-counter');
+      const captionEl = slider.querySelector('.exp-slide-caption');
+      const prevBtn = slider.querySelector('.card-slide-prev');
+      const nextBtn = slider.querySelector('.card-slide-next');
+      const dots = slider.querySelectorAll('.card-slider-dot');
+      const wrap = slider.querySelector('.card-slider-wrap');
+
+      function updateSlide(idx) {
+        currentIndex = (idx + totalImages) % totalImages;
+        if (slideImg) {
+          slideImg.style.opacity = '0.25';
+          slideImg.src = data.images[currentIndex];
+          slideImg.alt = data.imageLabels[currentIndex] || `${data.title} - Foto ${currentIndex + 1}`;
+          setTimeout(() => { slideImg.style.opacity = '1'; }, 90);
+        }
+        if (counterEl) {
+          counterEl.textContent = `📸 ${currentIndex + 1} / ${totalImages}`;
+        }
+        if (captionEl) {
+          captionEl.textContent = data.imageLabels[currentIndex] || `Foto ${currentIndex + 1}`;
+        }
+        dots.forEach((dot, dIdx) => {
+          dot.classList.toggle('active', dIdx === currentIndex);
+        });
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          updateSlide(currentIndex - 1);
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          updateSlide(currentIndex + 1);
+        });
+      }
+
+      dots.forEach((dot, dotIdx) => {
+        dot.addEventListener('click', e => {
+          e.stopPropagation();
+          updateSlide(dotIdx);
+        });
+      });
+
+      // Touch / Swipe handler (Android & iOS)
+      if (wrap) {
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        wrap.addEventListener('touchstart', e => {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        wrap.addEventListener('touchend', e => {
+          const diffX = e.changedTouches[0].clientX - touchStartX;
+          const diffY = e.changedTouches[0].clientY - touchStartY;
+          if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
+            if (diffX > 0) {
+              updateSlide(currentIndex - 1);
+            } else {
+              updateSlide(currentIndex + 1);
+            }
+          }
+        }, { passive: true });
+
+        // Klik gambar untuk buka galeri resolusi penuh Cinema Modal
+        wrap.addEventListener('click', e => {
+          if (e.target.closest('.card-slide-btn') || e.target.closest('.card-slider-dot')) return;
+          openCinemaModal(data);
+          updateGalleryView(currentIndex);
+        });
+      }
+    });
+
+    // Tombol "Buka Galeri Foto HD ⛶"
+    document.querySelectorAll('.exp-open-cinema-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        const expKey = btn.dataset.exp;
+        const data = WORK_EXP_DATA[expKey];
+        if (data) {
+          openCinemaModal(data);
+          updateGalleryView(0);
+        }
+      });
+    });
+  }
+
   // Copy email button interaction
   function initCopyEmail() {
     if (!copyEmailBtn) return;
 
     copyEmailBtn.addEventListener('click', async () => {
-      const email = copyEmailBtn.dataset.email || 'rifan.dev@example.com';
+      const email = copyEmailBtn.dataset.email || 'rifanmuchtarsupriatna@gmail.com';
       const badge = copyEmailBtn.querySelector('.btn-badge');
 
       try {
         await navigator.clipboard.writeText(email);
-        if (badge) badge.textContent = 'COPIED!';
+        if (badge) badge.textContent = 'TERSELIN!';
         if (badge) badge.style.background = '#00ff88';
         if (badge) badge.style.color = '#000';
 
         setTimeout(() => {
-          if (badge) badge.textContent = 'COPY';
+          if (badge) badge.textContent = 'SALIN';
           if (badge) badge.style.background = 'rgba(0, 0, 0, 0.3)';
           if (badge) badge.style.color = '#fff';
         }, 2500);
@@ -1085,6 +1252,7 @@
   preloadFrames();
   renderProjectVault();
   initTiltCards();
+  initWorkExperienceSliders();
   initCopyEmail();
   initBgModeToggle();
   requestAnimationFrame(renderLoop);
