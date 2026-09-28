@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=interactive-slider" />
+  <link rel="stylesheet" href="style.css?v=lite-mode-2col" />
 </head>
 <body>
   <!-- Preloader -->
@@ -45,6 +45,11 @@
         <button id="toggleBgModeBtn" class="nav-bg-mode-btn" title="Klik untuk ganti mode tampilan foto (Full Seamless / Full Cover)">
           <span class="mode-icon">⛶</span>
           <span id="bgModeText">BG: Full Seamless</span>
+        </button>
+
+        <button id="toggleLiteModeBtn" class="nav-lite-mode-btn" title="Mode Ringan: Optimalkan performa 60 FPS bebas lag">
+          <span class="lite-icon">⚡</span>
+          <span id="liteModeText">Mode Ringan: ON</span>
         </button>
       </div>
 
@@ -387,6 +392,9 @@
     </div>
   </div>
 
-  <script src="main.js?v=work-exp-slider"></script>
+  <!-- Floating Toast Notification -->
+  <div id="liteToast" class="lite-toast" aria-live="polite"></div>
+
+  <script src="main.js?v=lite-mode-2col"></script>
 </body>
 </html>

@@ -38,6 +38,15 @@
   const bgModeText = document.getElementById('bgModeText');
   let bgMode = localStorage.getItem('porto_bg_mode') || 'seamless'; // 'seamless' or 'cover'
 
+  // Lite Mode (Performance Profile) elements
+  const toggleLiteModeBtn = document.getElementById('toggleLiteModeBtn');
+  const liteModeText = document.getElementById('liteModeText');
+  const liteToast = document.getElementById('liteToast');
+  let toastTimer = null;
+  const isMobileScreen = window.innerWidth <= 960 || ('ontouchstart' in window);
+  const savedLiteMode = localStorage.getItem('porto_lite_mode');
+  let isLiteMode = savedLiteMode !== null ? (savedLiteMode === '1') : isMobileScreen;
+
   // -------------------------------------------------------------
   // PROJECT VAULT DATA REPOSITORY
   // Menampilkan arsip foto berurutan & video cuplikan projek nyata
@@ -237,9 +246,35 @@
   let dpr = 1;
   let viewWidth = 0;
   let viewHeight = 0;
+  let isLoopRunning = false;
+
+  function wakeRenderLoop() {
+    if (!isLoopRunning) {
+      isLoopRunning = true;
+      requestAnimationFrame(renderLoop);
+    }
+  }
+
+  function getBestAvailableFrame(targetIdx) {
+    if (images[targetIdx] && images[targetIdx].complete && images[targetIdx].naturalWidth > 0) {
+      return images[targetIdx];
+    }
+    for (let delta = 1; delta < TOTAL_FRAMES; delta++) {
+      const left = targetIdx - delta;
+      if (left >= 0 && images[left] && images[left].complete && images[left].naturalWidth > 0) {
+        return images[left];
+      }
+      const right = targetIdx + delta;
+      if (right < TOTAL_FRAMES && images[right] && images[right].complete && images[right].naturalWidth > 0) {
+        return images[right];
+      }
+    }
+    return null;
+  }
 
   function resizeCanvas() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const isMobile = window.innerWidth <= 960 || ('ontouchstart' in window);
+    dpr = (isLiteMode || isMobile) ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.5);
     viewWidth = window.innerWidth;
     viewHeight = window.innerHeight;
 
@@ -252,145 +287,151 @@
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.scale(dpr, dpr);
 
-    if (lastRenderedIndex >= 0 && images[lastRenderedIndex]) {
-      drawFrame(images[lastRenderedIndex]);
+    const frameToDraw = lastRenderedIndex >= 0 ? getBestAvailableFrame(lastRenderedIndex) : getBestAvailableFrame(0);
+    if (frameToDraw) {
+      drawFrame(frameToDraw);
     }
   }
 
-  // Offscreen canvas for fast, high-performance edge feathering
-  let featherCanvas = null;
-  let featherCtx = null;
-
-  function getFeatheredImage(img, w, h) {
-    if (!featherCanvas) {
-      featherCanvas = document.createElement('canvas');
-      featherCtx = featherCanvas.getContext('2d');
-    }
-    if (featherCanvas.width !== w || featherCanvas.height !== h) {
-      featherCanvas.width = w;
-      featherCanvas.height = h;
-    }
-
-    featherCtx.clearRect(0, 0, w, h);
-    featherCtx.drawImage(img, 0, 0, w, h);
-
-    // Feather the left and right borders smoothly so there are zero hard box lines
-    featherCtx.globalCompositeOperation = 'destination-in';
-    const featherWidth = Math.min(100, Math.round(w * 0.16));
-    const grad = featherCtx.createLinearGradient(0, 0, w, 0);
-    grad.addColorStop(0, 'rgba(0,0,0,0)');
-    grad.addColorStop(featherWidth / w, 'rgba(0,0,0,1)');
-    grad.addColorStop(1 - (featherWidth / w), 'rgba(0,0,0,1)');
-    grad.addColorStop(1, 'rgba(0,0,0,0)');
-
-    featherCtx.fillStyle = grad;
-    featherCtx.fillRect(0, 0, w, h);
-
-    featherCtx.globalCompositeOperation = 'source-over';
-    return featherCanvas;
-  }
-
-  // Draw frame with full-bleed background and seamless blending
+  // Draw frame with full-bleed background, hardware acceleration, and zero lag
   function drawFrame(img) {
     if (!img || !img.complete || img.naturalWidth === 0) return;
 
     const imgW = img.naturalWidth;
     const imgH = img.naturalHeight;
 
-    const offsetX = currentParallaxX * 18;
-    const offsetY = currentParallaxY * 12;
+    const isMobile = viewWidth <= 960;
+    const offsetX = (isLiteMode || isMobile) ? 0 : currentParallaxX * 16;
+    const offsetY = (isLiteMode || isMobile) ? 0 : currentParallaxY * 10;
 
     // Dark base matching the image shadow tones
-    ctx.fillStyle = '#0a0404';
+    ctx.fillStyle = '#060303';
     ctx.fillRect(0, 0, viewWidth, viewHeight);
 
     if (bgMode === 'cover') {
-      // MODE: TRUE FULL COVER (Stretches edge-to-edge across 100% of viewport)
+      // MODE: TRUE FULL COVER
       const scale = Math.max(viewWidth / imgW, viewHeight / imgH);
-      const w = imgW * scale;
-      const h = imgH * scale;
-      const x = (viewWidth - w) / 2 + offsetX;
-      // Smart vertical alignment: focuses on hair, eyes, and sunglasses
-      const y = (viewHeight - h) * 0.15 + offsetY;
+      const w = Math.round(imgW * scale);
+      const h = Math.round(imgH * scale);
+      const x = Math.round((viewWidth - w) / 2 + offsetX);
+      const y = Math.round((viewHeight - h) * 0.12 + offsetY);
 
       ctx.drawImage(img, x, y, w, h);
 
       // Subtle shadow on left side so hero text is always easily readable
       const leftShadow = ctx.createLinearGradient(0, 0, viewWidth * 0.55, 0);
-      leftShadow.addColorStop(0, 'rgba(7, 3, 3, 0.7)');
-      leftShadow.addColorStop(1, 'rgba(7, 3, 3, 0)');
+      leftShadow.addColorStop(0, 'rgba(6, 3, 3, 0.7)');
+      leftShadow.addColorStop(1, 'rgba(6, 3, 3, 0)');
       ctx.fillStyle = leftShadow;
       ctx.fillRect(0, 0, viewWidth, viewHeight);
     } else {
-      // MODE: FULL SEAMLESS (Default - Full-bleed ambient glow background + complete sharp portrait)
-      // 1. Pass 1: Full-bleed background filling 100% of the screen with the video's live colors
-      ctx.save();
-      const bgScale = Math.max(viewWidth / imgW, viewHeight / imgH);
-      const bgW = imgW * bgScale;
-      const bgH = imgH * bgScale;
-      const bgX = (viewWidth - bgW) / 2;
-      const bgY = (viewHeight - bgH) * 0.2;
-
-      ctx.filter = 'blur(45px) brightness(0.65) saturate(140%)';
-      ctx.drawImage(img, bgX, bgY, bgW, bgH);
-      ctx.restore();
-
-      // 2. Pass 2: Atmospheric ruby/crimson light spread expanding to the right edge
+      // MODE: FULL SEAMLESS (No expensive ctx.filter, 100% hardware-accelerated & 60 FPS)
+      // Pass 1: Atmospheric ruby/crimson light spread expanding naturally
       const ambientGlow = ctx.createRadialGradient(
-        viewWidth * 0.7, viewHeight * 0.45, 40,
-        viewWidth * 0.7, viewHeight * 0.45, viewWidth * 0.65
+        viewWidth * 0.7, viewHeight * 0.42, 30,
+        viewWidth * 0.7, viewHeight * 0.42, viewWidth * 0.65
       );
-      ambientGlow.addColorStop(0, 'rgba(255, 51, 102, 0.22)');
-      ambientGlow.addColorStop(0.5, 'rgba(180, 25, 55, 0.1)');
+      ambientGlow.addColorStop(0, 'rgba(255, 51, 102, 0.2)');
+      ambientGlow.addColorStop(0.5, 'rgba(180, 25, 55, 0.08)');
       ambientGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
       ctx.fillStyle = ambientGlow;
       ctx.fillRect(0, 0, viewWidth, viewHeight);
 
-      // 3. Pass 3: Sharp foreground subject with feathered edges (zero box cutoff!)
+      // Pass 2: Foreground portrait with optimized responsive framing
       let fgScale;
-      if (viewWidth < viewHeight) {
-        fgScale = Math.max(viewWidth / imgW, viewHeight / imgH);
+      let fgW;
+      let fgH;
+      let fgX;
+      let fgY;
+
+      if (isMobile) {
+        // MOBILE / TABLET FRAMING: Wajah tampak jelas & proporsional di balik kartu 2-kolom
+        fgScale = Math.max((viewWidth * 1.05) / imgW, (viewHeight * 0.78) / imgH);
+        fgW = Math.round(imgW * fgScale);
+        fgH = Math.round(imgH * fgScale);
+        fgX = Math.round((viewWidth - fgW) * 0.5 + (viewWidth * 0.05) + offsetX);
+        fgY = Math.round((viewHeight - fgH) * 0.12 + offsetY);
+
+        ctx.drawImage(img, fgX, fgY, fgW, fgH);
+
+        // Feather left & right edges seamlessly without offscreen canvas overhead
+        const featherW = Math.min(50, Math.round(fgW * 0.12));
+        const leftGrad = ctx.createLinearGradient(fgX, 0, fgX + featherW, 0);
+        leftGrad.addColorStop(0, '#060303');
+        leftGrad.addColorStop(1, 'rgba(6, 3, 3, 0)');
+        ctx.fillStyle = leftGrad;
+        ctx.fillRect(fgX, fgY, featherW, fgH);
+
+        const rightGrad = ctx.createLinearGradient(fgX + fgW - featherW, 0, fgX + fgW, 0);
+        rightGrad.addColorStop(0, 'rgba(6, 3, 3, 0)');
+        rightGrad.addColorStop(1, '#060303');
+        ctx.fillStyle = rightGrad;
+        ctx.fillRect(fgX + fgW - featherW, fgY, featherW, fgH);
       } else {
-        // Desktop: 105% viewport height, positioned cleanly in center/right
+        // DESKTOP: Clean center/right balance
         fgScale = (viewHeight / imgH) * 1.05;
+        fgW = Math.round(imgW * fgScale);
+        fgH = Math.round(imgH * fgScale);
+        const centerShift = viewWidth * 0.08;
+        fgX = Math.round((viewWidth - fgW) / 2 + centerShift + offsetX);
+        fgY = Math.round((viewHeight - fgH) / 2 + offsetY);
+
+        ctx.drawImage(img, fgX, fgY, fgW, fgH);
+
+        const featherW = Math.min(100, Math.round(fgW * 0.15));
+        const leftGrad = ctx.createLinearGradient(fgX, 0, fgX + featherW, 0);
+        leftGrad.addColorStop(0, '#060303');
+        leftGrad.addColorStop(1, 'rgba(6, 3, 3, 0)');
+        ctx.fillStyle = leftGrad;
+        ctx.fillRect(fgX, fgY, featherW, fgH);
+
+        const rightGrad = ctx.createLinearGradient(fgX + fgW - featherW, 0, fgX + fgW, 0);
+        rightGrad.addColorStop(0, 'rgba(6, 3, 3, 0)');
+        rightGrad.addColorStop(1, '#060303');
+        ctx.fillStyle = rightGrad;
+        ctx.fillRect(fgX + fgW - featherW, fgY, featherW, fgH);
       }
-      const fgW = Math.round(imgW * fgScale);
-      const fgH = Math.round(imgH * fgScale);
-
-      // Shift slightly right on desktop to balance with left hero typography
-      const centerShift = viewWidth > 960 ? viewWidth * 0.08 : 0;
-      const fgX = Math.round((viewWidth - fgW) / 2 + centerShift + offsetX);
-      const fgY = Math.round((viewHeight - fgH) / 2 + offsetY);
-
-      const featheredImg = getFeatheredImage(img, fgW, fgH);
-      ctx.drawImage(featheredImg, fgX, fgY);
     }
   }
 
-  // Main render loop
+  // Demand-driven render loop (auto-sleeps when idle to guarantee 0% GPU waste)
   function renderLoop() {
     const diff = targetProgress - currentProgress;
-    if (Math.abs(diff) > 0.0001) {
+    const isProgressMoving = Math.abs(diff) > 0.0002;
+    if (isProgressMoving) {
       currentProgress += diff * LERP_SPEED;
     } else {
       currentProgress = targetProgress;
     }
 
-    currentParallaxX += (mouseX - currentParallaxX) * 0.05;
-    currentParallaxY += (mouseY - currentParallaxY) * 0.05;
+    const parallaxDiffX = mouseX - currentParallaxX;
+    const parallaxDiffY = mouseY - currentParallaxY;
+    const isParallaxMoving = !isLiteMode && window.innerWidth > 960 && (Math.abs(parallaxDiffX) > 0.001 || Math.abs(parallaxDiffY) > 0.001);
+
+    if (isParallaxMoving) {
+      currentParallaxX += parallaxDiffX * 0.05;
+      currentParallaxY += parallaxDiffY * 0.05;
+    } else if (isLiteMode || window.innerWidth <= 960) {
+      currentParallaxX = 0;
+      currentParallaxY = 0;
+    }
 
     const frameIndex = Math.min(
       TOTAL_FRAMES - 1,
       Math.max(0, Math.round(currentProgress * (TOTAL_FRAMES - 1)))
     );
 
-    const isParallaxMoving = Math.abs(mouseX - currentParallaxX) > 0.002 || Math.abs(mouseY - currentParallaxY) > 0.002;
-    if ((frameIndex !== lastRenderedIndex || isParallaxMoving) && images[frameIndex]) {
-      drawFrame(images[frameIndex]);
+    const bestFrame = getBestAvailableFrame(frameIndex);
+    if ((frameIndex !== lastRenderedIndex || isParallaxMoving) && bestFrame) {
+      drawFrame(bestFrame);
       lastRenderedIndex = frameIndex;
     }
 
-    requestAnimationFrame(renderLoop);
+    if (isProgressMoving || isParallaxMoving) {
+      requestAnimationFrame(renderLoop);
+    } else {
+      isLoopRunning = false;
+    }
   }
 
   // Scroll listener
@@ -401,10 +442,13 @@
     } else {
       targetProgress = 0;
     }
+    wakeRenderLoop();
   }
 
   // Mouse move handler for 3D parallax
   function onMouseMove(e) {
+    if (isLiteMode || window.innerWidth <= 960 || ('ontouchstart' in window)) return;
+
     mouseX = (e.clientX / window.innerWidth) * 2 - 1;
     mouseY = (e.clientY / window.innerHeight) * 2 - 1;
 
@@ -412,16 +456,26 @@
     if (heroContent) {
       heroContent.style.transform = `translate3d(${mouseX * -14}px, ${mouseY * -10}px, 0)`;
     }
+    wakeRenderLoop();
   }
 
-  // Setup 3D interactive tilt on cards
+  // Setup 3D interactive tilt on cards (only on fine-pointer desktop devices in Ultra mode)
   function initTiltCards() {
+    const isMobile = window.innerWidth <= 960 || ('ontouchstart' in window);
     const cards = document.querySelectorAll('.tilt-card');
+
+    if (isLiteMode || isMobile) {
+      cards.forEach(card => {
+        card.style.transform = '';
+      });
+      return;
+    }
 
     cards.forEach(card => {
       const maxTilt = parseFloat(card.dataset.depth) || 20;
 
       card.addEventListener('mousemove', e => {
+        if (isLiteMode || window.innerWidth <= 960) return;
         const rect = card.getBoundingClientRect();
         const cardX = e.clientX - rect.left;
         const cardY = e.clientY - rect.top;
@@ -1179,17 +1233,39 @@
     });
   }
 
-  // Preload all 240 frames
+  // Progressive Frame Preloader (Instant <1s startup + idle background batching)
   function preloadFrames() {
-    for (let i = 0; i < TOTAL_FRAMES; i++) {
+    let initialReady = false;
+
+    function finishLoader() {
+      if (initialReady) return;
+      initialReady = true;
+      isReady = true;
+      if (loader) {
+        loader.classList.add('loaded');
+        setTimeout(() => {
+          if (loader && loader.parentNode) loader.remove();
+        }, 600);
+      }
+      const initialFrame = getBestAvailableFrame(0);
+      if (initialFrame) {
+        drawFrame(initialFrame);
+        lastRenderedIndex = 0;
+      }
+    }
+
+    // Step 1: Preload initial critical frames (first 16 frames)
+    const CRITICAL_COUNT = 16;
+    let criticalLoaded = 0;
+
+    for (let i = 0; i < CRITICAL_COUNT; i++) {
       const img = new Image();
       img.src = getFrameUrl(i);
-
       img.onload = () => {
         loadedCount++;
+        criticalLoaded++;
         images[i] = img;
-
-        const percent = Math.round((loadedCount / TOTAL_FRAMES) * 100);
+        const percent = Math.min(100, Math.round((criticalLoaded / CRITICAL_COUNT) * 100));
         if (loaderBar) loaderBar.style.width = `${percent}%`;
         if (loaderText) loaderText.textContent = `INITIALIZING 3D ENGINE ${percent}%`;
 
@@ -1198,25 +1274,91 @@
           lastRenderedIndex = 0;
         }
 
-        if (loadedCount === TOTAL_FRAMES) {
-          isReady = true;
-          if (loader) {
-            loader.classList.add('loaded');
-            setTimeout(() => loader.remove(), 800);
-          }
+        if (criticalLoaded >= 8) {
+          finishLoader();
         }
       };
-
       img.onerror = () => {
         loadedCount++;
-        if (loadedCount === TOTAL_FRAMES) {
-          isReady = true;
-          if (loader) {
-            loader.classList.add('loaded');
-            setTimeout(() => loader.remove(), 800);
-          }
-        }
+        criticalLoaded++;
+        if (criticalLoaded >= 8) finishLoader();
       };
+    }
+
+    // Safety fallback: ensure loader dismisses within 1.2s max so user never waits
+    setTimeout(finishLoader, 1200);
+
+    // Step 2: Background lazy load remaining frames in small batches
+    let nextBatchStart = CRITICAL_COUNT;
+    const BATCH_SIZE = 12;
+
+    function loadNextBatch() {
+      if (nextBatchStart >= TOTAL_FRAMES) return;
+      const batchEnd = Math.min(TOTAL_FRAMES, nextBatchStart + BATCH_SIZE);
+
+      for (let i = nextBatchStart; i < batchEnd; i++) {
+        const img = new Image();
+        img.src = getFrameUrl(i);
+        img.onload = () => {
+          images[i] = img;
+        };
+      }
+
+      nextBatchStart = batchEnd;
+      if (nextBatchStart < TOTAL_FRAMES) {
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(() => setTimeout(loadNextBatch, 80));
+        } else {
+          setTimeout(loadNextBatch, 120);
+        }
+      }
+    }
+
+    setTimeout(loadNextBatch, 400);
+  }
+
+  // Toast Notification Helper
+  function showToast(msg) {
+    if (!liteToast) return;
+    liteToast.textContent = msg;
+    liteToast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      liteToast.classList.remove('show');
+    }, 2800);
+  }
+
+  // Mode Ringan (Performance Profile) Setup
+  function updateLiteModeUI() {
+    if (document.body) {
+      document.body.classList.toggle('lite-mode', isLiteMode);
+    }
+    if (liteModeText) {
+      liteModeText.textContent = isLiteMode ? 'Mode Ringan: ON' : 'Mode Ultra: ON';
+    }
+    if (toggleLiteModeBtn) {
+      toggleLiteModeBtn.title = isLiteMode
+        ? 'Mode Ringan Aktif (60 FPS bebas lag) — Klik untuk beralih ke Mode Ultra'
+        : 'Mode Ultra Aktif — Klik untuk beralih ke Mode Ringan (Bebas Lag)';
+    }
+    resizeCanvas();
+    initTiltCards();
+    wakeRenderLoop();
+  }
+
+  function initLiteModeToggle() {
+    updateLiteModeUI();
+    if (toggleLiteModeBtn) {
+      toggleLiteModeBtn.addEventListener('click', () => {
+        isLiteMode = !isLiteMode;
+        localStorage.setItem('porto_lite_mode', isLiteMode ? '1' : '0');
+        updateLiteModeUI();
+        if (isLiteMode) {
+          showToast('⚡ Mode Ringan Aktif: 60 FPS maksimal, bebas lag!');
+        } else {
+          showToast('💎 Mode Ultra Aktif: Efek dinamis & visual penuh');
+        }
+      });
     }
   }
 
@@ -1236,15 +1378,19 @@
         localStorage.setItem('porto_bg_mode', bgMode);
         updateBtnLabel();
 
-        if (lastRenderedIndex >= 0 && images[lastRenderedIndex]) {
-          drawFrame(images[lastRenderedIndex]);
+        const frame = lastRenderedIndex >= 0 ? getBestAvailableFrame(lastRenderedIndex) : getBestAvailableFrame(0);
+        if (frame) {
+          drawFrame(frame);
         }
       });
     }
   }
 
   // Initialize
-  window.addEventListener('resize', resizeCanvas, { passive: true });
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    wakeRenderLoop();
+  }, { passive: true });
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('mousemove', onMouseMove, { passive: true });
 
@@ -1255,5 +1401,6 @@
   initWorkExperienceSliders();
   initCopyEmail();
   initBgModeToggle();
-  requestAnimationFrame(renderLoop);
+  initLiteModeToggle();
+  wakeRenderLoop();
 })();
