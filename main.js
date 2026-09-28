@@ -71,64 +71,6 @@
       tags: ['Next.js', 'React', 'Python Scraper', 'Playwright', 'SQLite', 'Ollama Local AI', 'TailwindCSS']
     },
     {
-      id: 'proj-btn-infra',
-      title: 'IT Support & Network Infrastructure — PT. Bank Tabungan Negara',
-      category: 'infra',
-      categoryLabel: 'IT SUPPORT & INFRA',
-      mediaType: 'gallery',
-      images: [
-        'assets/videos/IT Support PT. Bank Tabungan Negara/1.png',
-        'assets/videos/IT Support PT. Bank Tabungan Negara/2.jpeg',
-        'assets/videos/IT Support PT. Bank Tabungan Negara/3.jpeg',
-        'assets/videos/IT Support PT. Bank Tabungan Negara/4.jpeg',
-        'assets/videos/IT Support PT. Bank Tabungan Negara/5.jpeg',
-        'assets/videos/IT Support PT. Bank Tabungan Negara/6.jpeg'
-      ],
-      imageLabels: [
-        '1. Foto Dokumentasi Kerja IT Support di PT. Bank Tabungan Negara',
-        '2. Manajemen Rak Server, Switch Jaringan & Penataan Kabel LAN',
-        '3. Deployment Workstation & Penataan Perangkat PC Kantor Cabang',
-        '4. Troubleshooting Jaringan & Diagnosa Sistem via Windows CMD',
-        '5. Verifikasi IP Jaringan & Konfigurasi Adapter Wi-Fi/LAN',
-        '6. Monitoring Operasional Sistem & Kebijakan Internal Perbankan'
-      ],
-      quality: 'REAL WORK / 6 FOTO',
-      client: 'PT. Bank Tabungan Negara (Persero) Tbk',
-      year: '2026',
-      role: 'IT Support Specialist',
-      desc: 'Pemeliharaan dan dukungan infrastruktur teknologi perbankan: penataan rak server dan switch LAN, troubleshooting hardware & network, deployment workstation karyawan, serta monitoring keamanan sistem operasional harian.',
-      tags: ['Network Troubleshooting', 'LAN / Switch Routing', 'Server Rack Cabling', 'Windows CMD', 'System Security', 'Hardware Diagnostics']
-    },
-    {
-      id: 'proj-web-toko-bunga',
-      title: 'Amora Craft House — Web Toko Bunga, Admin & Owner Dashboard',
-      category: 'fullstack',
-      categoryLabel: 'FULLSTACK & E-COMMERCE',
-      mediaType: 'gallery',
-      images: [
-        'assets/videos/vendor/1.jpeg',
-        'assets/videos/vendor/2.jpeg',
-        'assets/videos/vendor/3.jpeg',
-        'assets/videos/vendor/4.jpeg',
-        'assets/videos/vendor/5.jpeg',
-        'assets/videos/vendor/6.jpeg'
-      ],
-      imageLabels: [
-        '1. Portal Login Admin & Owner — Akses Autentikasi Terenkripsi & RLS',
-        '2. Menu Utama Admin — Dashboard, Pesanan, Produk, Absensi & Analitik',
-        '3. Panel Owner Monitoring — Ringkasan Realtime, Audit Trail Live & Deteksi Fraud',
-        '4. Website Toko Bunga — Halaman Utama E-Commerce Florist Amora ("Where Beauty Blooms Eternal")',
-        '5. Our Heritage — Storytelling & Filosofi Perjalanan Florist Romantis',
-        '6. Form Checkout Pemesanan — Multi-Metode Pembayaran (BCA, Mandiri, E-Wallet, COD)'
-      ],
-      quality: 'FULLSTACK / 6 FOTO',
-      client: 'Amora Craft House (Florist)',
-      year: '2026',
-      role: 'Fullstack Web Developer & Vendor',
-      desc: 'Platform digital e-commerce dan sistem operasional bisnis terintegrasi untuk Amora Craft House. Terdiri dari 3 jenis program utama: (1) Website Toko Bunga & E-Commerce Pelanggan (katalog produk interaktif, keranjang belanja, & form checkout multi-metode pembayaran), (2) Dashboard Operasional Admin (manajemen inventaris bunga, katalog produk, status pesanan, & analitik), serta (3) Panel Monitoring Owner (pengawasan omzet real-time, audit trail keamanan anti-fraud, dan verifikasi absensi kamera karyawan berbasis Supabase BaaS & PostgreSQL).',
-      tags: ['Website E-Commerce', 'Dashboard Admin', 'Owner Monitoring Panel', 'Sistem Absensi Kamera', 'React 18', 'TypeScript', 'TailwindCSS', 'Vite', 'Supabase BaaS', 'PostgreSQL 15', 'Vanilla JS', 'MediaDevices API']
-    },
-    {
       id: 'proj-maps-roblox',
       title: 'MAPS Roblox — 3D Obby & Custom Lua Architecture',
       category: 'game',
